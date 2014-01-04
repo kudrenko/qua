@@ -8,6 +8,8 @@ tell application "Finder"
 	end repeat
 end tell
 
+delay 10
+
 set script_1 to "mdfind -0 -onlyin '/Volumes/HDD_MED_201304/Photos' 'as_test_20140103' | xargs -0 -I {} cp {} /Users/me/temp_applescript"
 do shell script script_1
 
@@ -45,3 +47,5 @@ tell application "Mail"
 end tell
 
 tell application "Finder" to delete (files of folder "Macintosh HD:Users:Me:temp_applescript" whose name extension is "jpg")
+
+do shell script "mdfind -0 -onlyin '/Volumes/HDD_MED_201304/Photos' 'as_test_20140103' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"photo_emailed\" -keywords-=\"as_test_20140103\" {}"
