@@ -1,4 +1,4 @@
--- creates new folder if it doesn't exist
+-- creates new folder
 do shell script "mkdir ~/temp_photos"
 
 tell application "Finder"
