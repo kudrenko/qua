@@ -1,4 +1,4 @@
--- creates new folder
+-- creates new folder in home directory
 do shell script "mkdir ~/temp_photos"
 
 tell application "Finder"
@@ -25,15 +25,7 @@ set script_2 to "sips -Z 2000 /Users/me/temp_photos/*"
 do shell script script_2
 
 -- creates a list of files to be attached
-tell application "Finder"
-	set attchList to every file of TempPhotos
-	set theCNT to count of attchList
-	if theCNT = 1 then
-		set attchList to attchList as alias as list
-	else
-		set attchList to every file of TempPhotos as alias list
-	end if
-end tell
+tell application "Finder" to set attchList to (every item of TempPhotos) as alias list
 
 -- checks if application Mail is running
 tell application "System Events"
@@ -46,28 +38,25 @@ tell application "System Events"
 end tell
 
 -- creates a new e-mail
-set theSender to "Alex Kudrenko<a@a.me>"
-set recipCommon to "The Dude"
-set recipAddress to "a@icloud.com"
+set theSender to "Alex Kudrenko<alex@kudrenko.me>"
+set recipName to "The Dude"
+set recipAddress to "kudrenko@icloud.com"
 set msgText to "Sent using cool Alex Kudrenko's Application"
 
 tell application "Mail"
 	
-	set newmessage to make new outgoing message with properties {subject:"Important File Attachment", content:msgText & return & return}
+	set newmessage to make new outgoing message with properties {subject:"Important File Attachment", content:msgText & return & return, visible:true}
 	tell newmessage
-		set visible to false
+		set visible to true
 		set sender to theSender
-		
-		make new to recipient with properties {name:recipCommon, address:recipAddress}
-		make new attachment with properties {file name:attchList} at after the last paragraph
+		make new to recipient with properties {name:recipName, address:recipAddress}
+		repeat with attach in attchList
+			make new attachment with properties {file name:(contents of attach)} at after the last paragraph
+		end repeat
 		
 	end tell
 	send newmessage
 end tell
-
--- gives some time for files to be e-mailed
--- not sure if it is required
-delay 15
 
 -- deletes all files & DIR
 tell application "Finder"
