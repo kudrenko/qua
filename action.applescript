@@ -7,7 +7,7 @@ end tell
 
 -- serches for a tag within specified folder
 -- & then copies all matching files to a folder
-set script_1 to "mdfind -0 'tbe_par' | xargs -0 -I {} cp {} ~/temp_photos"
+set script_1 to "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} cp {} ~/temp_photos"
 do shell script script_1
 
 -- checks if there are any files in folder
@@ -87,5 +87,5 @@ set DateTag to (text 1 thru 8 of the result)
 -- [download](http://www.sno.phy.queensu.ca/~phil/exiftool/)
 -- [faq](http://www.sno.phy.queensu.ca/~phil/exiftool/faq.html)
 -- escape literal double quote with a backslash charachter
-do shell script "mdfind -0 'tbe_par' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
+do shell script "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
 	"\" -keywords-=\"tbe_par\" {}"
