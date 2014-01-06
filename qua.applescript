@@ -5,10 +5,9 @@ tell application "Finder"
 	set TempPhotos to folder "temp_photos" of home
 end tell
 
--- serches for a tag within specified folder
--- & then copies all matching files to a folder
-set script_1 to "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} cp {} ~/temp_photos"
-do shell script script_1
+-- serches for a tag within kMDItemKeywords metadata attribute
+-- & then copies all matching files to the temp folder
+do shell script "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} cp {} ~/temp_photos"
 
 -- checks if there are any files in folder
 -- if not stops the ascript
@@ -21,8 +20,7 @@ end tell
 
 -- [man](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/sips.1.html)
 -- resample image so height and width aren't greater than specified size
-set script_2 to "sips -Z 2000 ~/temp_photos/*"
-do shell script script_2
+do shell script "sips -Z 2000 ~/temp_photos/*"
 
 -- creates a list of files to be attached
 tell application "Finder" to set attchList to (every item of TempPhotos) as alias list
@@ -31,16 +29,16 @@ tell application "Finder" to set attchList to (every item of TempPhotos) as alia
 tell application "System Events"
 	set ProcessList to name of every process
 	if "Mail" is in ProcessList then
-		set TheMail to 1
+		set MailAppRun to 1
 	else
-		set TheMail to 2
+		set MailAppRun to 2
 	end if
 end tell
 
 -- creates a new e-mail
-set theSender to "Alex Kudrenko<alex@alex.me>"
+set theSender to "Alex Kudrenko<alex@kudrenko.me>"
 set recipName to "The Dude"
-set recipAddress to "alex@icloud.com"
+set recipAddress to "kudrenko@icloud.com"
 set msgText to "Sent using cool Alex Kudrenko's Application"
 
 tell application "Mail"
@@ -75,7 +73,7 @@ tell application "System Events"
 end tell
 
 -- quits Mail app if it wasn't running
-if TheMail is equal to 2 then
+if MailAppRun is equal to 2 then
 	do shell script "kill -KILL " & ThePID
 end if
 
