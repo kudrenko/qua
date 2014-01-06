@@ -16,4 +16,4 @@ It is a combination of AppleScript & shell script that does:
 - create temp copy of found files
 - resize them to max size of 2000 pix
 - e-mail photos to predefined e-mail address
-- remove original keyword & add "emailed_CurrentDate" to kMDItemKeywords metadata attribute
+- remove original keyword & add "emailed_CurrentDate" to kMDItemKeywords metadata attribute of e-mailed files
