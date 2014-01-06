@@ -1,4 +1,4 @@
-email_photos
+Qua App
 ============
 
-AppleScript to search for keywords in photos &amp; e-mail them
+AppleScript & Shell script to search for keywords in photos &amp; e-mail them
