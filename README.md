@@ -1,4 +1,4 @@
-Qua App
+Qua.app
 ============
 
 ### What does it do?
