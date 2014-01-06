@@ -7,7 +7,7 @@ end tell
 
 -- serches for a tag within specified folder
 -- & then copies all matching files to a folder
-set script_1 to "mdfind -0 -onlyin '/Volumes/HDD_MED_201304/Photos' 'as_test_20140103' | xargs -0 -I {} cp {} /Users/me/temp_photos"
+set script_1 to "mdfind -0 'tbe_par' | xargs -0 -I {} cp {} ~/temp_photos"
 do shell script script_1
 
 -- checks if there are any files in folder
@@ -21,7 +21,7 @@ end tell
 
 -- [man](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/sips.1.html)
 -- resample image so height and width aren't greater than specified size
-set script_2 to "sips -Z 2000 /Users/me/temp_photos/*"
+set script_2 to "sips -Z 2000 ~/temp_photos/*"
 do shell script script_2
 
 -- creates a list of files to be attached
@@ -79,8 +79,13 @@ if TheMail is equal to 2 then
 	do shell script "kill -KILL " & ThePID
 end if
 
+-- generates new tag with current date
+tell (current date) to get ((its year) * 10000 + (its month as integer) * 100 + (its day)) as string
+set DateTag to (text 1 thru 8 of the result)
+
 -- install exiftool to use this shell script
 -- [download](http://www.sno.phy.queensu.ca/~phil/exiftool/)
 -- [faq](http://www.sno.phy.queensu.ca/~phil/exiftool/faq.html)
 -- escape literal double quote with a backslash charachter
-do shell script "mdfind -0 -onlyin '/Volumes/HDD_MED_201304/Photos' 'as_test_20140103' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"photo_emailed\" -keywords-=\"as_test_20140103\" {}"
+do shell script "mdfind -0 'tbe_par' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
+	";\" -keywords-=\"tbe_par\" {}"
