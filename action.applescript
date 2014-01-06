@@ -88,4 +88,4 @@ set DateTag to (text 1 thru 8 of the result)
 -- [faq](http://www.sno.phy.queensu.ca/~phil/exiftool/faq.html)
 -- escape literal double quote with a backslash charachter
 do shell script "mdfind -0 'tbe_par' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
-	";\" -keywords-=\"tbe_par\" {}"
+	"\" -keywords-=\"tbe_par\" {}"
