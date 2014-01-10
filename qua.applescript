@@ -1,5 +1,12 @@
+-- removes temp_photos to trash if exists
+try
+	do shell script "mv ~/temp_photos ~/.Trash/"
+end try
+
 -- creates new folder in home directory
-do shell script "mkdir ~/temp_photos"
+try
+	do shell script "mkdir ~/temp_photos"
+end try
 
 tell application "Finder"
 	set TempPhotos to folder "temp_photos" of home
@@ -7,7 +14,9 @@ end tell
 
 -- serches for a tag within kMDItemKeywords metadata attribute
 -- & then copies all matching files to the temp folder
-do shell script "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} cp {} ~/temp_photos"
+try
+	do shell script "mdfind -0 '((kMDItemKeywords == '*qua_PAR*') && (kMDItemContentType == \"public.jpeg\"))' | xargs -0 -I {} cp {} ~/temp_photos"
+end try
 
 -- checks if there are any files in folder
 -- if not stops the ascript
@@ -20,7 +29,9 @@ end tell
 
 -- [man](https://developer.apple.com/library/mac/documentation/Darwin/Reference/ManPages/man1/sips.1.html)
 -- resample image so height and width aren't greater than specified size
-do shell script "sips -Z 2000 ~/temp_photos/*"
+try
+	do shell script "sips -Z 2000 ~/temp_photos/*"
+end try
 
 -- creates a list of files to be attached
 tell application "Finder" to set attchList to (every item of TempPhotos) as alias list
@@ -85,5 +96,7 @@ set DateTag to (text 1 thru 8 of the result)
 -- [download](http://www.sno.phy.queensu.ca/~phil/exiftool/)
 -- [faq](http://www.sno.phy.queensu.ca/~phil/exiftool/faq.html)
 -- escape literal double quote with a backslash charachter
-do shell script "mdfind -0 \"kMDItemKeywords == '*qua_PAR*'\" | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
-	"\" -keywords-=\"tbe_par\" {}"
+try
+	do shell script "mdfind -0 '((kMDItemKeywords == '*qua_PAR*') && (kMDItemContentType == \"public.jpeg\"))' | xargs -0 -I {} exiftool -overwrite_original_in_place -P -keywords+=\"emailed_" & DateTag & ¬
+		"\" -keywords-=\"qua_PAR\" {}"
+end try
