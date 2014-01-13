@@ -1,9 +1,9 @@
--- removes temp_photos to trash if exists
+-- removes "temp_photos" dir to trash if it exists
 try
 	do shell script "mv ~/temp_photos ~/.Trash/"
 end try
 
--- creates new folder in home directory
+-- creates new folder in home directory "temp_photos"
 try
 	do shell script "mkdir ~/temp_photos"
 end try
@@ -12,13 +12,13 @@ tell application "Finder"
 	set TempPhotos to folder "temp_photos" of home
 end tell
 
--- serches for a tag within kMDItemKeywords metadata attribute
--- & then copies all matching files to the temp folder
+-- serches for a tag within kMDItemKeywords metadata attribute of JPEG images
+-- & then copies all matching files to the "temp_folder" dir
 try
 	do shell script "mdfind -0 '((kMDItemKeywords == '*qua_PAR*') && (kMDItemContentType == \"public.jpeg\"))' | xargs -0 -I {} cp {} ~/temp_photos"
 end try
 
--- checks if there are any files in folder
+-- checks if there are any files in "temp_folder"
 -- if not stops the ascript
 tell application "Finder"
 	count files of entire contents of TempPhotos
