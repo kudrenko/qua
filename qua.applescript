@@ -12,14 +12,14 @@ tell application "Finder"
 	set TempPhotos to folder "temp_photos" of home
 end tell
 
--- serches for a tag within kMDItemKeywords metadata attribute of JPEG images
+-- serches for a tag within kMDItemKeywords metadata attribute
 -- & then copies all matching files to the temp folder
 try
 	do shell script "mdfind -0 '((kMDItemKeywords == '*qua_PAR*') && (kMDItemContentType == \"public.jpeg\"))' | xargs -0 -I {} cp {} ~/temp_photos"
 end try
 
 -- checks if there are any files in folder
--- if not stops the script
+-- if not stops the ascript
 tell application "Finder"
 	count files of entire contents of TempPhotos
 	if the result = 0 then
@@ -46,25 +46,32 @@ tell application "System Events"
 	end if
 end tell
 
+-- generates new tag with current date for e-mail
+tell (current date) to get ((its year) * 10000 + (its month as integer) * 100 + (its day)) as string
+set MailSubj to (text 1 thru 4 of the result & "-" & text 5 thru 6 of the result & "-" & text 7 thru 8 of the result)
+
 -- creates a new e-mail
 set theSender to "Alex Kudrenko<alex@kudrenko.me>"
-set recipName to "The Dude"
-set recipAddress to "kudrenko@icloud.com"
+set RecipList to {"kudrenko@icloud.com", "alex@alexkudrenko.com"}
 set msgText to "Sent using cool Alex Kudrenko's Application"
 
 tell application "Mail"
 	
-	set newmessage to make new outgoing message with properties {subject:"Important File Attachment", content:msgText & return & return, visible:false}
-	tell newmessage
+	set newMessage to make new outgoing message with properties {subject:"Some cool photos " & MailSubj, content:msgText & return & return, visible:false}
+	tell newMessage
 		set visible to false
 		set sender to theSender
-		make new to recipient with properties {name:recipName, address:recipAddress}
+		repeat with i from 1 to count RecipList
+			make new to recipient at end of to recipients with properties ¬
+				{address:item i of RecipList}
+		end repeat
+		
 		repeat with attach in attchList
 			make new attachment with properties {file name:(contents of attach)} at after the last paragraph
 		end repeat
 		
 	end tell
-	send newmessage
+	send newMessage
 end tell
 
 delay 30
