@@ -12,14 +12,14 @@ tell application "Finder"
 	set TempPhotos to folder "temp_photos" of home
 end tell
 
--- serches for a tag within kMDItemKeywords metadata attribute
+-- serches for a tag within kMDItemKeywords metadata attribute of JPEG images
 -- & then copies all matching files to the temp folder
 try
 	do shell script "mdfind -0 '((kMDItemKeywords == '*qua_PAR*') && (kMDItemContentType == \"public.jpeg\"))' | xargs -0 -I {} cp {} ~/temp_photos"
 end try
 
 -- checks if there are any files in folder
--- if not stops the ascript
+-- if not stops the script
 tell application "Finder"
 	count files of entire contents of TempPhotos
 	if the result = 0 then
