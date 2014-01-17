@@ -24,6 +24,7 @@ tell application "Finder"
 	count files of entire contents of TempPhotos
 	if the result = 0 then
 		error number -128
+		display notification "dude, you have no images to e-mail to your parents!"
 	end if
 end tell
 
@@ -53,7 +54,7 @@ set MailSubj to (text 1 thru 4 of the result & "-" & text 5 thru 6 of the result
 --> creates a new e-mail
 set theSender to "Alex Kudrenko<alex@kudrenko.me>"
 set RecipList to {"kudrenko@icloud.com", "alex@alexkudrenko.com"}
-set msgText to "Sent using cool Alex Kudrenko's Application"
+set msgText to "Sent using cool Qua app."
 
 tell application "Mail"
 	
@@ -74,7 +75,7 @@ tell application "Mail"
 	send newMessage
 end tell
 
-delay 30
+delay 20
 
 --> count files are in dir (excludes invisible files or items within packages)
 tell application "Finder"
@@ -115,5 +116,5 @@ end try
 
 
 display notification (AllFiles as string) & ¬
-	" images were e-mailed."
+	" images were e-mailed to your parents."
 delay 1 --> allow time for the notification to trigger
