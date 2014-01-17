@@ -23,8 +23,10 @@ end try
 tell application "Finder"
 	count files of entire contents of TempPhotos
 	if the result = 0 then
+		display notification "Man, you have no images selected for sending to your parents this time!"
+		delay 2
 		error number -128
-		display notification "dude, you have no images to e-mail to your parents!"
+		
 	end if
 end tell
 
@@ -47,7 +49,7 @@ tell application "System Events"
 	end if
 end tell
 
---> generates new tag with current date for e-mail
+--> generates a new string with current date for e-mail subj
 tell (current date) to get ((its year) * 10000 + (its month as integer) * 100 + (its day)) as string
 set MailSubj to (text 1 thru 4 of the result & "-" & text 5 thru 6 of the result & "-" & text 7 thru 8 of the result)
 
@@ -114,6 +116,8 @@ try
 		"\" -keywords-=\"qua_PAR\" {}"
 end try
 
+display notification "New tag \"emailed_" & DateTag & "\" was applied to " & AllFiles & " images."
+delay 7 --> allow time for the notification to trigger
 
 display notification (AllFiles as string) & ¬
 	" images were e-mailed to your parents."
